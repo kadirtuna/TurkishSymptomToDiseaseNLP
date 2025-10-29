@@ -6,6 +6,7 @@ from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
 import re
 import snowballstemmer
+from zemberek_client import get_lemmas
 
 # ===========================
 # Load API key
@@ -32,11 +33,35 @@ embedding_model = SentenceTransformer("intfloat/multilingual-e5-base")
 # Normalization
 # ===========================
 stemmer = snowballstemmer.stemmer('turkish')
+# Example Turkish stopwords list (you can expand this)
+TURKISH_STOPWORDS = {
+    "ve", "ile", "mi", "da", "de", "bir", "bu", "şu", "o", "için", "ama", "fakat",
+    "veya", "çok", "gibi", "kadar", "eğer", "ise", "daha", "en", "ve", "ki"
+}
 
 def normalize_tokens(text):
-    # Lowercase and remove non-alphabetic characters
-    tokens = re.findall(r'\b[a-zA-ZığüşöçİĞÜŞÖÇ]+\b', text.lower())
-    return set(stemmer.stemWord(t) for t in tokens)
+    """
+    Normalize Turkish text for token overlap:
+    - Lowercase
+    - Remove punctuation and numbers
+    - Remove stopwords
+    - Lemmatize using Zemberek
+    Returns a set of normalized tokens.
+    """
+    # Step 1: Lemmatize with Zemberek
+    lemmas = get_lemmas(text)
+    
+    normalized_tokens = set()
+    for lemma in lemmas:
+        # Step 2: Lowercase
+        token = lemma.lower()
+        # Step 3: Remove punctuation and numbers
+        token = re.sub(r'[^a-zığüşöç]', '', token)
+        # Step 4: Skip stopwords and empty tokens
+        if token and token not in TURKISH_STOPWORDS:
+            normalized_tokens.add(token)
+    
+    return normalized_tokens
 
 def token_overlap(query, doc_text):
     """Compute normalized token overlap."""
@@ -98,6 +123,7 @@ def format_context(docs):
 # Ask GPT-4
 # ===========================
 def ask_gpt4(user_input):
+    patient_symptoms = list(normalize_tokens(user_input))
     retrieved_docs = retrieve_relevant_context(user_input, k=5)
     context_text = format_context(retrieved_docs)
 
@@ -105,13 +131,27 @@ def ask_gpt4(user_input):
         "Sen bir tıbbi NLP sistemisin. "
         "Aşağıdaki 'veri tabanı içeriği' hastalık, bölüm ve belirtiler bilgisini içerir. "
         "Kullanıcı Türkçe olarak belirtilerini girecektir. "
-        "Sadece context içindeki bilgilerden yararlan. "
-        "Context dışında bilgi üretme. "
-        "Eğer belirtiler context ile eşleşmiyorsa 'Verilen veri tabanında uygun hastalık bulunamadı' yaz.\n"
-        "Cevabı formatla:\n"
-        "- Olası hastalıklar (context'ten alınmış):\n"
-        "- Önerilen hastane bölümü:\n"
-        "- Açıklama (context'e dayalı, 1-2 cümle):"
+        "Yanıtını **mutlaka JSON formatında ver** ve başka hiçbir metin ekleme. "
+        "JSON yapısı şu şekilde olmalıdır: "
+        "{"
+        "'patient_symptoms': [ ... ], "
+        "'departments': [ ... ], "
+        "'extra_symptoms': { 'Departman Adı': [ ... ], 'Hastalık Adı': [ ... ] }, "
+        "'disease_probabilities': [{ 'disease': 'Hastalık Adı', 'probability': 0.xx }], "
+        "'explanation': '...' "
+        "}"
+        "Kurallar: "
+        "1. 'patient_symptoms' alanında, normalize edilmiş kullanıcı belirtilerini listele. "
+        "2. Eğer belirtiler tek bir departmanla yüksek güvenle eşleşiyorsa, 'departments' listesinde sadece o departmanı ver. "
+        "3. Eğer belirtiler birden fazla departmanla benzer düzeyde eşleşiyorsa, 'departments' listesinde en ilgili departmanları ver ve "
+        "her departman için 'extra_symptoms' listesinde kullanıcıya sorulabilecek ek semptomları ekle. "
+        "4. 'disease_probabilities' alanında, **verilen context içinde bulunan TÜM olası hastalıkları** (örneğin top-k = 5 veya 10), "
+        "departman eşleşmesinden veya olasılık düzeyinden bağımsız şekilde **tam liste olarak** ver. "
+        "Her hastalık için 0.00–0.99 aralığında makul bir olasılık değeri ile doldur (Bunun için Final score'ları kullan), "
+        "ve hiçbir hastalığı atlama. "
+        "5. 'extra_symptoms' alanında, **departmanlardan bağımsız olarak**, tüm hastalıklar ('disease_probabilities'te bulunan) için kullanıcıya sorulabilecek önemli semptomları ekle. "
+        "6. 'explanation' alanında doktorun okuyacağı kısa ama detaylı açıklama olmalı; her hastalık için hangi ek semptomları dikkate alması gerektiğini belirt. "
+        "7. Eğer belirtiler context ile eşleşmiyorsa, 'departments' ve 'disease_probabilities' boş listeler, 'extra_symptoms' boş obje, 'explanation' kısa uyarı mesajı olsun."
     )
 
     user_prompt = f"Veri tabanı kayıtları:\n{context_text}\n\nKullanıcının belirtileri: {user_input}"
@@ -122,10 +162,14 @@ def ask_gpt4(user_input):
     print(user_prompt[:2000])
 
     response = openai.chat.completions.create(
-        model="gpt-4-turbo",
+        model="gpt-4.1-mini",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
+            {
+                "role": "user",
+                "content": f"Hastanın belirtileri (tokenizasyon ile çıkarılmış): {patient_symptoms}"
+            },
         ],
         temperature=0.2,
     )
@@ -143,7 +187,3 @@ if __name__ == "__main__":
 
     print("\n==================== AI YANITI ====================")
     print(answer)
-
-    print("\n==================== İLGİLİ KAYITLAR ====================")
-    for i, doc in enumerate(docs):
-        print(f"\n{i+1}. {doc['text'][:250]}...")
