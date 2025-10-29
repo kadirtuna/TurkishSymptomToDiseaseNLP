@@ -92,14 +92,17 @@ def retrieve_relevant_context(query, k=5):
             similarity = 1 / (1 + dist)
             overlap_score = token_overlap(query, doc_text)
             # Hybrid score: 70% semantic, 30% token overlap
-            final_score = 0.7 * similarity + 0.3 * overlap_score
+            # Ensure native Python floats for JSON serialization
+            similarity_f = float(similarity)
+            overlap_f = float(overlap_score)
+            final_score = float(0.7 * similarity_f + 0.3 * overlap_f)
 
             retrieved.append({
-                "text": doc_text,
-                "Disease": metadata["diseases"][i],
-                "Department": metadata["departments"][i],
-                "similarity": similarity,
-                "overlap": overlap_score,
+                "text": str(doc_text),
+                "Disease": str(metadata["diseases"][i]),
+                "Department": str(metadata["departments"][i]),
+                "similarity": similarity_f,
+                "overlap": overlap_f,
                 "final_score": final_score
             })
 

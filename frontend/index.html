@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RAG Tıbbi Asistan - Frontend</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 2rem; }
+      label { font-size: 1.2rem; }
+      textarea { width: 100%; height: 6rem; margin-top: .5rem; }
+      button { margin-top: .5rem; padding: .5rem 1rem; }
+      pre { background: #f6f8fa; padding: 1rem; border-radius: 6px; white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>🩺 RAG Tıbbi Asistan (Frontend)</h1>
+    <div>
+      <label for="symptoms">🩺 Hangi semptomlara sahipsin?:</label>
+      <textarea id="symptoms" placeholder="örn: Başım ağrıyor ve midem bulanıyor"></textarea>
+      <br>
+      <button id="send">Gönder</button>
+    </div>
+
+    <h2>Yanıt</h2>
+    <pre id="output">(Cevap burada görünecek)</pre>
+
+    <h3>İlgili Belgeler</h3>
+    <pre id="docs">(Belgeler burada görünecek)</pre>
+
+    <script>
+      // Configure backend URL. If you serve frontend from a different origin than
+      // the backend, set BACKEND_URL accordingly (e.g. http://127.0.0.1:5000)
+      const BACKEND_URL = 'http://127.0.0.1:5000';
+
+      async function callApi(symptoms) {
+        const res = await fetch(BACKEND_URL + '/api/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ symptoms })
+        });
+        return res.json();
+      }
+
+      document.getElementById('send').addEventListener('click', async ()=>{
+        const symptoms = document.getElementById('symptoms').value.trim();
+        const out = document.getElementById('output');
+        const docs = document.getElementById('docs');
+        if (!symptoms) { out.textContent = 'Lütfen semptom girin.'; return; }
+        out.textContent = 'Bekleyiniz...';
+        docs.textContent = '';
+        try {
+          const data = await callApi(symptoms);
+          let a = data.answer;
+          if (typeof a === 'object') {
+            out.textContent = JSON.stringify(a, null, 2);
+          } else {
+            try { out.textContent = JSON.stringify(JSON.parse(a), null, 2); }
+            catch { out.textContent = a }
+          }
+
+          if (data.retrieved_docs) {
+            docs.textContent = data.retrieved_docs.map((d,i)=>`${i+1}. ${d.Disease} (${d.Department})\n${d.text}`).join('\n\n');
+          }
+        } catch (e) {
+          out.textContent = 'Hata: ' + e;
+        }
+      });
+
+      // Allow usage with ?symptoms=... in URL
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const s = params.get('symptoms');
+        if (s) {
+          document.getElementById('symptoms').value = s;
+          document.getElementById('send').click();
+        }
+      } catch(e) { console.warn(e) }
+    </script>
+  </body>
+</html>
