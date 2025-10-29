@@ -1,0 +1,126 @@
+(# Byte-compiled / optimized / DLL files)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+eggs/
+*.egg-info/
+.installed.cfg
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+.tox/
+.nox/
+.coverage
+coverage.*
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# pyenv
+.python-version
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+venv.bak/
+
+# VS Code
+.vscode/
+
+# JetBrains IDEs
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Node / frontend
+**/node_modules/
+frontend-react/build/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment / secrets
+.env
+.env.*
+env.py
+.envrc
+credentials.json
+secrets.json
+*.key
+
+# Logs and databases
+*.log
+logs/
+*.sql
+*.sqlite
+*.db
+*.db-journal
+
+# Generated files / caches
+.cache
+.parcel-cache
+dist/
+
+# Python specific caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Mypy
+.mypy_cache/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Editor backup files
+*~
+# Swap files
+*.swp
+
+# FAISS / vector index and other generated vector data
+vector/
+faiss_index/
+data/vector/
+*.index
+*.faiss
+
+# Project-specific large/generated files
+*.npz
+*.npy
+*.ckpt
+*.pth
+
+# Misc
+.coverage
+coverage.xml
+
