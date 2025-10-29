@@ -7,7 +7,7 @@ import pickle
 # ==============================
 # Step 1 — Load Dataset
 # ==============================
-df = pd.read_csv("hastalik_with_text.csv", encoding="utf-8")
+df = pd.read_csv("data/hastalik_with_text.csv", encoding="utf-8")
 
 # Ensure 'text' column exists
 if "text" not in df.columns:

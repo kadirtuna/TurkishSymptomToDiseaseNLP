@@ -17,9 +17,9 @@ openai.api_key = os.getenv("OPENAI_API_TOKEN")
 # Load FAISS + metadata
 # ===========================
 print("🔍 Loading FAISS index and metadata...")
-index = faiss.read_index("disease_faiss.index")
+index = faiss.read_index("data/vector/disease_faiss.index")
 
-with open("disease_metadata.pkl", "rb") as f:
+with open("data/vector/disease_metadata.pkl", "rb") as f:
     metadata = pickle.load(f)  # {"texts": [...], "diseases": [...], "departments": [...]}
 
 # ===========================
@@ -42,6 +42,14 @@ def token_overlap(query, doc_text):
     """Compute normalized token overlap."""
     query_tokens = normalize_tokens(query)
     doc_tokens = normalize_tokens(doc_text)
+
+    # Print original texts
+    print(f"Query: {query}")
+    print(f"Doc text: {doc_text}")
+    
+    print(f"Query tokens: {query_tokens}")
+    print(f"Doc tokens: {doc_tokens}")
+
     return len(query_tokens & doc_tokens) / max(len(query_tokens), 1)
 
 # ===========================
