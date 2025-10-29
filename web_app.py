@@ -33,35 +33,18 @@ def api_ask():
     return jsonify({'error': 'Could not load RAG module', 'detail': str(e)}), 500
 
   # Retrieve context
-  try:
-    retrieved = rag.retrieve_relevant_context(symptoms, k=5)
-  except Exception as e:
-    return jsonify({'error': 'Retrieval failed', 'detail': str(e)}), 500
+  # Directly call the RAG pipeline's ask_gpt4 (no fallback logic)
+  answer, docs = rag.ask_gpt4(symptoms)
 
-  # Attempt LLM call with timeout; if fails return fallback
-  try:
-    answer, docs = rag.ask_gpt4(symptoms)
-    # Try to parse the answer (LLM returns a JSON string). If parse succeeds, return object.
-    parsed = None
-    if isinstance(answer, str):
-      try:
-        parsed = json.loads(answer)
-      except Exception:
-        parsed = None
+  # Try to parse the answer (LLM returns a JSON string). If parse succeeds, return object.
+  parsed = None
+  if isinstance(answer, str):
+    try:
+      parsed = json.loads(answer)
+    except Exception:
+      parsed = None
 
-    return jsonify({'answer': parsed if parsed is not None else answer, 'retrieved_docs': retrieved})
-  except Exception as e:
-    # Fallback: construct a simple JSON response from retrieved docs
-    fallback = {
-      'patient_symptoms': rag.normalize_tokens(symptoms),
-      'departments': list({d['Department'] for d in retrieved}),
-      'extra_symptoms': {},
-      'disease_probabilities': [
-        {'disease': d['Disease'], 'probability': round(d['final_score'], 2)} for d in retrieved
-      ],
-      'explanation': 'LLM çağrısı başarısız oldu, retrieval tabanlı tahminler döndürüldü.'
-    }
-    return jsonify({'answer': None, 'retrieved_docs': retrieved, 'fallback': fallback, 'error': str(e)})
+  return jsonify({'answer': parsed if parsed is not None else answer, 'retrieved_docs': docs})
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=True)
