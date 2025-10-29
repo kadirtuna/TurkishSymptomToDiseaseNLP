@@ -1,0 +1,270 @@
+Disease,Department
+Mantar Enfeksiyonu,Enfeksiyon Hastalıkları
+Alerji,Genel Dahiliye
+GERD,Genel Dahiliye
+Kronik Kolestaz,Gastroenteroloji
+İlaç Reaksiyonu,Genel Dahiliye
+Peptik Ülser Hastalığı,Gastroenteroloji
+AIDS,Enfeksiyon Hastalıkları
+Diyabet,Dahiliye (İç Hastalıkları)
+Gastroenterit,Gastroenteroloji
+Bronşiyal Astım,Göğüs Hastalıkları
+Hipertansiyon,Kardiyoloji
+Migren,Nöroloji
+Servikal Spondiloz,Genel Dahiliye
+Felç (beyin kanaması),Nöroloji
+Sarılık,Genel Dahiliye
+Sıtma,Enfeksiyon Hastalıkları
+Suçiçeği,Enfeksiyon Hastalıkları
+Dang Humması,Enfeksiyon Hastalıkları
+Tifo,Enfeksiyon Hastalıkları
+Hepatit A,Enfeksiyon Hastalıkları
+Hepatit B,Enfeksiyon Hastalıkları
+Hepatit C,Enfeksiyon Hastalıkları
+Hepatit D,Enfeksiyon Hastalıkları
+Hepatit E,Enfeksiyon Hastalıkları
+Alkolik Hepatit,Enfeksiyon Hastalıkları
+Tüberküloz,Enfeksiyon Hastalıkları
+Soğuk Algınlığı,Genel Dahiliye
+Akciğer İltihaplanması (zatüre),Göğüs Hastalıkları
+Dimorfik Hemoroit,Genel Dahiliye
+Kalp Krizi,Kardiyoloji
+Varisli Damarlar,Genel Dahiliye
+Hipotiroidizm,Dahiliye (İç Hastalıkları)
+Hipertiroidizm,Dahiliye (İç Hastalıkları)
+Hipoglisemi,Dahiliye (İç Hastalıkları)
+Osteoartrit,Ortopedi
+Artrit,Ortopedi
+Paroymsal Pozisyonel Vertigo,Nöroloji
+Akne,Dermatoloji
+İdrar Yolu Enfeksiyonu,Enfeksiyon Hastalıkları
+Sedef Hastalığı,Dermatoloji
+İmpetigo,Genel Dahiliye
+Kovid,Enfeksiyon Hastalıkları
+Dimorfik Hemoroid,Genel Cerrahi
+Paroksismal Pozisyonel Vertigo,Nöroloji
+Nezle,Genel Dahiliye
+Bronşit,Göğüs Hastalıkları
+Felç,Nöroloji
+Kanser,Onkoloji
+Alzheimer Hastalığı,Nöroloji
+Adenovirüs,Genel Dahiliye
+Aflatoksikoz,Genel Dahiliye
+Alerjik Rinit,Genel Dahiliye
+Anemi,Dahiliye (İç Hastalıkları)
+Anksiyete Bozukluğu,Psikiyatri
+Apandisit,Genel Cerrahi
+Asperger Sendromu,Genel Dahiliye
+Astım,Göğüs Hastalıkları
+Bakteriyel Menenjit,Genel Dahiliye
+Bipolar Bozukluk,Psikiyatri
+Mesane Kanseri,Üroloji
+Kan Pıhtısı,Genel Dahiliye
+Bursit,Genel Dahiliye
+Rahim Ağzı Kanseri,Onkoloji
+Göz Nezlesi,Göz Hastalıkları
+Depresyon,Psikiyatri
+İshal,Genel Dahiliye
+Yüksek Ateş,Genel Dahiliye
+Gıda Zehirlenmesi,Genel Dahiliye
+Safra Taşları,Genel Dahiliye
+Kalp Hastalığı,Kardiyoloji
+Grip,Enfeksiyon Hastalıkları
+Huzursuz Bağırsak Sendromu,Genel Dahiliye
+Böbrek Taşı,Nefroloji
+Akciğer Kanseri,Göğüs Hastalıkları
+Kızamık,Genel Dahiliye
+Menenjit,Genel Dahiliye
+Mononükleoz,Enfeksiyon Hastalıkları
+Kuduz,Enfeksiyon Hastalıkları
+Salmonella,Genel Dahiliye
+Zona Hastalığı,Genel Dahiliye
+Siğiller,Dermatoloji
+Akantamoebkeratit,Göz Hastalıkları
+Akut Apandisit,Genel Cerrahi
+Akut Böbrek Yetmezliği,Nefroloji
+Aort Anevrizması,Kardiyoloji
+Kolon Kanseri,Onkoloji
+Demans,Genel Dahiliye
+Ereksiyon Bozukluğu,Genel Dahiliye
+Fibromiyalji,Ortopedi
+Glokom,Göz Hastalıkları
+Parkinson Hastalığı,Nöroloji
+Periferik Arter Hastalığı,Genel Dahiliye
+Prostat Kanseri,Üroloji
+Romatizmal Eklem İltihabı,Ortopedi
+Mide Kanseri,Onkoloji
+Tiroid Kanseri,Dahiliye (İç Hastalıkları)
+Ülseratif Kolit,Gastroenteroloji
+Atopik Dermatit,Dermatoloji
+Çölyak Hastalığı,Gastroenteroloji
+Kronik Böbrek Hastalığı,Nefroloji
+Crohn Hastalığı,Gastroenteroloji
+Graves Hastalığı,Endokrinoloji
+Hashimoto Tiroiditi,Dahiliye (İç Hastalıkları)
+Tip 1 Diyabet,Dahiliye (İç Hastalıkları)
+Tip 2 Diyabet,Dahiliye (İç Hastalıkları)
+İdrar Taşları,Nefroloji
+Güneşe Maruz Kalmaya Bağlı Dermatit,Dermatoloji
+Uyuz,Dermatoloji
+Egzama,Dermatoloji
+Kronik Baş Ağrısı,Genel Dahiliye
+Lupus,Genel Dahiliye
+Endometriozis,Endokrinoloji
+Siyatik,Ortopedi
+Analjeziklere Bağlı Zehirlenme,Genel Dahiliye
+Kıl Kurdu Enfeksiyonu,Enfeksiyon Hastalıkları
+Üretral Valfler,Nefroloji
+Saçkıran,Genel Dahiliye
+Kronik Sinüzit,KBB (Kulak Burun Boğaz)
+Kolesteatom,Genel Dahiliye
+Bağırsak Düğümlenmesi,Genel Dahiliye
+Hemartroz,Genel Dahiliye
+Göz Kapağı Kisti,Göz Hastalıkları
+Balanit,Genel Dahiliye
+Bağırsak Malabsorbsiyonu,Genel Dahiliye
+Faranjit,Genel Dahiliye
+Gastroparezi,Genel Cerrahi
+Baş ve Boyun Kanseri,Onkoloji
+Kronik Hastalık Anemisi,Dahiliye (İç Hastalıkları)
+Kızıl Hastalığı,Genel Dahiliye
+Hipertansif Kalp Hastalığı,Kardiyoloji
+Madde Bağımlılığı,Psikiyatri
+Ansefalit,Genel Dahiliye
+Kas Spazmı,Ortopedi
+Böbrek Yetmezliği,Nefroloji
+Diş Çürüğü,Genel Dahiliye
+Burun Bozukluğu,KBB (Kulak Burun Boğaz)
+Hemolitik Anemi,Dahiliye (İç Hastalıkları)
+A Vitamini Eksikliği,Genel Dahiliye
+Belsoğukluğu,Genel Dahiliye
+Ependimom,Nöroşirürji
+Toksine Bağlı Hepatit,Enfeksiyon Hastalıkları
+Uçuk,Dermatoloji
+Meme Kanseri,Onkoloji
+Testis Kanseri,Üroloji
+Anksiyete,Psikiyatri
+Burun Apsesi,KBB (Kulak Burun Boğaz)
+Lösemi,Onkoloji
+Farenjit,KBB (Kulak Burun Boğaz)
+Siringomiyeli,Nöroşirürji
+Pulmoner Fibroz,Göğüs Hastalıkları
+Gut,Genel Dahiliye
+Gıda Alerjisi,Genel Dahiliye
+Adet Öncesi Gerginlik Sendromu,Endokrinoloji
+Panik Atak,Psikiyatri
+B12 Vitamini Eksikliği,Genel Dahiliye
+Mesane Bozukluğu,Üroloji
+Bitler,Genel Dahiliye
+Antidepresanlara Bağlı Zehirlenme,Genel Dahiliye
+Magnezyum Eksikliği,Genel Dahiliye
+Siroz,Genel Dahiliye
+Kırık,Ortopedi
+Hipertansif Hastalık,Genel Dahiliye
+Ruhsal Depresyon,Psikiyatri
+Koroner Arterioskleroz,Kardiyoloji
+Kronik Kalp Yetmezliği,Kardiyoloji
+Serebrovasküler Kaza,Nöroloji
+Miyokardiyal Enfarktüs,Kardiyoloji
+Hiperkolesterolemi,Dahiliye (İç Hastalıkları)
+Enfeksiyon,Enfeksiyon Hastalıkları
+Kronik Obstrüktif Akciğer Hastalığı,Göğüs Hastalıkları
+Bilinç Bulanıklığı,Genel Dahiliye
+Dejeneratif Poliartrit,Ortopedi
+Malign Neoplazmalar,Onkoloji
+Kazanılmış Bağışıklık Sendromu,Genel Dahiliye
+Selülit,Dermatoloji
+Gastroözofajeal Reflü Hastalığı,Gastroenteroloji
+Kan Zehirlenmesi,Genel Dahiliye
+Derin Toplar Damar Pıhtılaşması,Genel Dahiliye
+Dehidrasyon,Genel Dahiliye
+Neoplazma,Onkoloji
+Akciğer Embolisi,Göğüs Hastalıkları
+Epilepsi,Nöroloji
+Kardiyomiyopati,Kardiyoloji
+Kronik Böbrek Yetmezliği,Nefroloji
+Karsinom,Genel Dahiliye
+Periferik Damar Hastalığı,Genel Dahiliye
+Psikotik Bozukluk,Genel Dahiliye
+Hiperlipidemi,Genel Dahiliye
+Obezite,Dahiliye (İç Hastalıkları)
+İskemi,Genel Dahiliye
+Ekzantem,Genel Dahiliye
+İyi Huylu Prostat Hipertrofisi,Üroloji
+Mitral Kapak Yetmezliği,Genel Dahiliye
+Hemiparezi,Genel Dahiliye
+Kemik Erimesi,Ortopedi
+Geçici İskemik Atak,Ortopedi
+Adenokarsinom,Onkoloji
+Paranoya,Psikiyatri
+Pankreatit,Gastroenteroloji
+İdrar Kaçırma,Nefroloji
+Paroksismal Dispne,Genel Dahiliye
+Fıtık,Genel Cerrahi
+Prostat Malign Neoplazmı,Üroloji
+Akciğer Ödemi,Göğüs Hastalıkları
+Lenf Hastalıkları,Genel Dahiliye
+Aort Kapağı Darlığı,Kardiyoloji
+Meme Malign Neoplazmı,Onkoloji
+Şizofreni,Psikiyatri
+Divertikülit,Genel Dahiliye
+Aşırı Sıvı Yüklenmesi,Genel Dahiliye
+Peptik Ülser,Gastroenteroloji
+Osteomiyelit,Genel Dahiliye
+Gastrit,Gastroenteroloji
+Bakteriyemi,Genel Dahiliye
+Orak Hücre Anemisi,Dahiliye (İç Hastalıkları)
+Kalp Yetmezliği,Kardiyoloji
+Üst Solunum Yolu Enfeksiyonu,Göğüs Hastalıkları
+Pulmoner Hipertansiyon,Kardiyoloji
+Yutma Bozukluğu,Genel Dahiliye
+Trombositopeni,Hematoloji
+Aspirasyon Pnömonisi,Göğüs Hastalıkları
+Kolit,Gastroenteroloji
+Divertiküloz,Genel Dahiliye
+İntihar Girişimi,Genel Dahiliye
+Pnömokistik Carinii Pnömoni,Göğüs Hastalıkları
+Lenfoma,Onkoloji
+Hiperglisemi,Dahiliye (İç Hastalıkları)
+Ensefalopati,Genel Dahiliye
+Triküspit Kapak Yetmezliği,Genel Dahiliye
+Pamukçuk,Genel Dahiliye
+Nöropati,Nöroloji
+Böbrek Hastalığı,Nefroloji
+Fibroid Tümör,Onkoloji
+Tümör Metastazı,Onkoloji
+Kötü Huylu Kolon Tümörü,Onkoloji
+Diyabetik Ketoasidoz,Dahiliye (İç Hastalıkları)
+Tonik-Klonik Epilepsi,Nöroloji
+Solunum Yetmezliği,Göğüs Hastalıkları
+Melanom,Onkoloji
+Kötü Huylu Akciğer Tümörü,Göğüs Hastalıkları
+Manik Bozukluk,Psikiyatri
+Kişilik Bozukluğu,Psikiyatri
+Karaciğer Hücrelerinin Primer Karsinomu,Genel Dahiliye
+Akciğer Amfizemi,Göğüs Hastalıkları
+Hemoroid,Genel Cerrahi
+Bronşiyal Spazm,Genel Dahiliye
+Afazi,Nöroloji
+Morbid Obezite,Dahiliye (İç Hastalıkları)
+Pyelonefrit,Nefroloji
+Endokardit,Kardiyoloji
+Perikardiyal Efüzyon,Kardiyoloji
+Kronik Alkol Zehirlenmesi,Genel Dahiliye
+Pnömotoraks,Göğüs Hastalıkları
+Deliryum,Genel Dahiliye
+Nötropeni,Genel Dahiliye
+Hiperbilirubinemi,Genel Dahiliye
+Bağımlılık,Genel Dahiliye
+Trombüs,Genel Dahiliye
+Kolesistit,Gastroenteroloji
+Hiyatus Hernisi,Genel Dahiliye
+Migren Bozuklukları,Nöroloji
+Pansitopeni,Genel Dahiliye
+Kolelityaz,Genel Dahiliye
+Sinüs Taşikardisi,Genel Dahiliye
+İleus,Genel Dahiliye
+Adhezyon,Genel Dahiliye
+Sanrı,Genel Dahiliye
+Duygu Değişimi,Genel Dahiliye
+Dekübit Ülser,Gastroenteroloji
