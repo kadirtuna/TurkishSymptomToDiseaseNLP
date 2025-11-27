@@ -18,6 +18,7 @@ def health():
 
 @app.route('/api/ask', methods=['POST'])
 def api_ask():
+  print("api_ask called")
   """JSON API: accepts {'symptoms': '...'} and returns JSON with 'answer' and 'retrieved_docs'.
   If the LLM call fails, returns a fallback using the retrieval results."""
   data = request.get_json(force=True, silent=True) or {}

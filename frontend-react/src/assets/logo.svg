@@ -1,0 +1,17 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#60a5fa" />
+      <stop offset="1" stop-color="#7c3aed" />
+    </linearGradient>
+  </defs>
+  <!-- Soft rounded container -->
+  <rect width="160" height="160" rx="28" fill="url(#g)" />
+
+  <!-- Calmer symbol: stylized stethoscope-like shape -->
+  <g transform="translate(30,30)" fill="#fff" opacity="0.98">
+    <path d="M36 8c-9.94 0-18 8.06-18 18v8a4 4 0 0 0 8 0v-8c0-5.52 4.48-10 10-10s10 4.48 10 10v18a10 10 0 1 0 8 0v-18c0-9.94-8.06-18-18-18z"/>
+    <circle cx="28" cy="60" r="10" opacity="0.95" />
+  </g>
+
+</svg>
