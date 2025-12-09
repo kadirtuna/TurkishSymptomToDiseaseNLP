@@ -96,6 +96,7 @@ python3 ./web_app.py
 
 **Note:** If port 5000 is already in use:
 - On Linux/macOS: Kill processes using port 5000 with `lsof -ti:5000 | xargs kill -9`
+- On Windows: Kill processes using port 5000 with `netstat -ano | findstr :5000` (find PID) then `taskkill /PID <PID> /F`
 - Or change the port in `web_app.py` file
 
 ### Step 3: Start the Frontend
