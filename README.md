@@ -96,6 +96,30 @@ npm start
 3. Wait for the response
 4. The medical recommendation will be displayed in the output field
 
+## Screenshots
+
+### Landing Page
+
+The main interface where users can input their symptoms in Turkish.
+
+![Landing Page](main-page.png)
+
+### RAG Medical Assistant Output
+
+The output from "RAG Tıbbi Asistan" displays comprehensive medical analysis including:
+- **Sonuç** (Result) - Overall diagnosis recommendation
+- **Özet Belirtiler** (Summary of Symptoms) - Key symptoms identified
+- **Bölümler** (Departments) - Recommended medical departments to visit
+- **Açıklama** (Explanation) - Detailed explanation of the diagnosis
+
+![Diseases Output](diseases-output.png)
+
+### Probable Diseases
+
+Shows the most probable diseases diagnosed by the RAG system with their main symptom definitions. This helps doctors see possible diseases based on the user's symptoms.
+
+![Probable Diseases](probable-diseases.png)
+
 ## Project Structure
 
 ```
