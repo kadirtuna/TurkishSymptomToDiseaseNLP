@@ -102,7 +102,7 @@ npm start
 
 The main interface where users can input their symptoms in Turkish.
 
-![Landing Page](main-page.png)
+![Landing Page](images/main-page.png)
 
 ### RAG Medical Assistant Output
 
@@ -112,13 +112,13 @@ The output from "RAG Tıbbi Asistan" displays comprehensive medical analysis inc
 - **Bölümler** (Departments) - Recommended medical departments to visit
 - **Açıklama** (Explanation) - Detailed explanation of the diagnosis
 
-![Diseases Output](diseases-output.png)
+![Diseases Output](images/diseases-output.png)
 
 ### Probable Diseases
 
 Shows the most probable diseases diagnosed by the RAG system with their main symptom definitions. This helps doctors see possible diseases based on the user's symptoms.
 
-![Probable Diseases](probable-diseases.png)
+![Probable Diseases](images/probable-diseases.png)
 
 ## Project Structure
 
