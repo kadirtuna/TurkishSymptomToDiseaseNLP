@@ -19,9 +19,14 @@ openai.api_key = os.getenv("OPENAI_API_TOKEN")
 # Load FAISS + metadata
 # ===========================
 print("🔍 Loading FAISS index and metadata...")
-index = faiss.read_index("data/vector/disease_faiss.index")
+# Get the project root directory (two levels up from this file)
+project_root = os.path.join(os.path.dirname(__file__), '..', '..')
+faiss_index_path = os.path.join(project_root, "data", "vector", "disease_faiss.index")
+metadata_path = os.path.join(project_root, "data", "vector", "disease_metadata.pkl")
 
-with open("data/vector/disease_metadata.pkl", "rb") as f:
+index = faiss.read_index(faiss_index_path)
+
+with open(metadata_path, "rb") as f:
     metadata = pickle.load(f)  # {"texts": [...], "diseases": [...], "departments": [...]}
 
 # ===========================
