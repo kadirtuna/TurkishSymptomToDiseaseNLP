@@ -2,6 +2,30 @@
 
 A medical symptom analysis application using Retrieval-Augmented Generation (RAG) with OpenAI and FAISS vector database. The system processes Turkish language symptoms using Zemberek NLP and provides medical recommendations.
 
+## Screenshots
+
+### Landing Page
+
+The main interface where users can input their symptoms in Turkish.
+
+![Landing Page](images/main-page.png)
+
+### RAG Medical Assistant Output
+
+The output from "RAG Tıbbi Asistan" displays comprehensive medical analysis including:
+- **Sonuç** (Result) - Overall diagnosis recommendation
+- **Özet Belirtiler** (Summary of Symptoms) - Key symptoms identified
+- **Bölümler** (Departments) - Recommended medical departments to visit
+- **Açıklama** (Explanation) - Detailed explanation of the diagnosis
+
+![Diseases Output](images/diseases-output.png)
+
+### Probable Diseases
+
+Shows the most probable diseases diagnosed by the RAG system with their main symptom definitions. This helps doctors see possible diseases based on the user's symptoms.
+
+![Probable Diseases](images/probable-diseases.png)
+
 ## System Requirements
 
 - Docker installed
@@ -95,30 +119,6 @@ npm start
 2. Click on the **"Gönder"** button
 3. Wait for the response
 4. The medical recommendation will be displayed in the output field
-
-## Screenshots
-
-### Landing Page
-
-The main interface where users can input their symptoms in Turkish.
-
-![Landing Page](images/main-page.png)
-
-### RAG Medical Assistant Output
-
-The output from "RAG Tıbbi Asistan" displays comprehensive medical analysis including:
-- **Sonuç** (Result) - Overall diagnosis recommendation
-- **Özet Belirtiler** (Summary of Symptoms) - Key symptoms identified
-- **Bölümler** (Departments) - Recommended medical departments to visit
-- **Açıklama** (Explanation) - Detailed explanation of the diagnosis
-
-![Diseases Output](images/diseases-output.png)
-
-### Probable Diseases
-
-Shows the most probable diseases diagnosed by the RAG system with their main symptom definitions. This helps doctors see possible diseases based on the user's symptoms.
-
-![Probable Diseases](images/probable-diseases.png)
 
 ## Project Structure
 
