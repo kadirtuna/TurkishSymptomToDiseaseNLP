@@ -69,7 +69,6 @@ pnpm-debug.log*
 
 # Environment / secrets
 .env
-.env.*
 env.py
 .envrc
 credentials.json
