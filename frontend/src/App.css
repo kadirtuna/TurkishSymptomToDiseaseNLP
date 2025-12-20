@@ -39,3 +39,92 @@ textarea{width:100%; min-height:110px; padding:12px; border-radius:10px; border:
 @keyframes floaty{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.02)}100%{transform:translateY(0) scale(1)}}
 
 .answer{background:#fff; padding:1rem; border-radius:8px; box-shadow:0 0 0 1px #eee; color:#041024}
+/* Role Selection */
+.role-selection{display:flex; align-items:center; justify-content:center; min-height:100vh; padding:40px}
+.role-selection-inner{text-align:center; max-width:700px}
+.logo-large{width:120px; margin-bottom:20px}
+.role-selection-inner h1{font-size:32px; margin:16px 0 8px 0}
+.subtitle{color:var(--muted); margin-bottom:40px; font-size:16px}
+.role-cards{display:grid; grid-template-columns:1fr 1fr; gap:24px}
+.role-card{background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:32px 24px; cursor:pointer; transition:all 0.3s ease}
+.role-card:hover{transform:translateY(-4px); box-shadow:0 12px 40px rgba(6,182,212,0.2); border-color:var(--accent1)}
+.role-icon{font-size:64px; margin-bottom:16px}
+.role-card h2{margin:12px 0 8px 0; font-size:24px}
+.role-card p{color:var(--muted); font-size:14px; margin:0}
+
+/* Header Bar */
+.header-bar{display:flex; align-items:center; justify-content:space-between; padding:16px 24px; background:var(--card); border-bottom:1px solid rgba(255,255,255,0.05)}
+.btn-back{background:transparent; border:1px solid rgba(255,255,255,0.1); color:var(--muted); padding:8px 16px; border-radius:8px; cursor:pointer; transition:all 0.2s}
+.btn-back:hover{background:rgba(255,255,255,0.05); color:#fff}
+
+/* Navigation View */
+.navigation-view{display:flex; align-items:center; justify-content:center; min-height:100vh; padding:40px}
+.navigation-inner{text-align:center; background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border-radius:20px; padding:48px 40px; max-width:600px; border:1px solid rgba(255,255,255,0.08)}
+.navigation-icon{font-size:80px; margin-bottom:24px}
+.navigation-inner h1{margin:0 0 24px 0; font-size:28px}
+.navigation-department{font-size:20px; margin-bottom:24px; padding:20px; background:rgba(6,182,212,0.1); border-radius:12px; border:1px solid rgba(6,182,212,0.3)}
+.navigation-department strong{color:var(--accent1)}
+.navigation-symptoms{color:var(--muted); margin-bottom:32px; padding:16px; background:rgba(255,255,255,0.02); border-radius:8px}
+
+/* Survey */
+.survey-container{max-width:700px; margin:80px auto; padding:40px}
+.survey-card{background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:40px; text-align:center}
+.survey-question{color:var(--muted); margin-bottom:24px; font-size:18px}
+.symptom-box{background:rgba(6,182,212,0.1); border:2px solid rgba(6,182,212,0.3); border-radius:12px; padding:24px; margin:24px 0; font-size:20px; font-weight:600; color:var(--accent1)}
+.survey-actions{display:flex; gap:16px; justify-content:center; margin-top:32px}
+.btn-secondary{background:rgba(255,255,255,0.05); color:#fff; border:1px solid rgba(255,255,255,0.1); padding:12px 32px; border-radius:10px; font-weight:700; cursor:pointer; transition:all 0.2s}
+.btn-secondary:hover{background:rgba(255,255,255,0.1)}
+.survey-hint{margin-top:24px; color:var(--muted); font-size:14px}
+
+/* Doctor View */
+.department-filter{margin-top:24px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.1)}
+.department-filter label{display:block; margin-bottom:8px; font-size:14px; color:var(--muted)}
+.select-box{width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:14px}
+.patient-list{display:flex; flex-direction:column; gap:16px; margin-top:20px}
+.empty-state{text-align:center; color:var(--muted); padding:40px; background:rgba(255,255,255,0.02); border-radius:12px}
+.patient-card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.05); border-radius:12px; padding:20px; transition:all 0.2s}
+.patient-card:hover{border-color:rgba(6,182,212,0.3); box-shadow:0 4px 20px rgba(6,182,212,0.1)}
+.patient-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px}
+.patient-id{font-weight:700; color:var(--accent1)}
+.patient-department{background:rgba(124,58,237,0.2); color:var(--accent2); padding:4px 12px; border-radius:6px; font-size:13px; font-weight:600}
+.patient-symptoms{margin-bottom:12px; line-height:1.6}
+.patient-time{color:var(--muted); font-size:13px}
+.patient-card.clickable{cursor:pointer}
+.patient-action{margin-top:12px; color:var(--accent1); font-size:14px; font-weight:600}
+
+/* Patient Detail View */
+.patient-summary{margin-top:24px; padding:16px; background:rgba(255,255,255,0.02); border-radius:8px}
+.patient-summary h3{margin:0 0 12px 0}
+.patient-summary p{margin:6px 0; font-size:14px}
+.patient-detail{display:flex; flex-direction:column; gap:24px}
+.detail-section{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.05); border-radius:12px; padding:24px}
+.detail-section h2{margin:0 0 16px 0; font-size:20px; display:flex; align-items:center; gap:8px}
+.detail-section.highlight{border-color:rgba(255,193,7,0.3); background:rgba(255,193,7,0.05)}
+.detail-section.important{border-color:rgba(6,182,212,0.4); background:rgba(6,182,212,0.08); border-width:2px}
+.symptoms-box{background:rgba(6,182,212,0.05); border-radius:8px; padding:16px}
+.symptoms-box ul{margin:0; padding-left:24px}
+.symptoms-box li{margin:8px 0; line-height:1.6}
+.info-text{color:var(--muted); margin-bottom:12px; font-size:14px}
+.symptoms-ask-list{list-style:none; padding:0; margin:0}
+.symptoms-ask-list li{background:rgba(255,255,255,0.03); padding:12px 16px; border-radius:8px; margin:8px 0; border-left:3px solid rgba(255,193,7,0.6)}
+.probability-list{display:flex; flex-direction:column; gap:16px}
+.probability-item{background:rgba(255,255,255,0.02); padding:16px; border-radius:8px}
+.probability-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px}
+.disease-name{font-weight:600; font-size:16px}
+.probability-value{color:var(--accent1); font-weight:700; font-size:16px}
+.probability-bar{height:8px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden}
+.probability-fill{height:100%; background:linear-gradient(90deg, var(--accent1), var(--accent2)); border-radius:4px; transition:width 0.3s ease}
+.explanation-box{background:rgba(255,255,255,0.02); padding:24px; border-radius:8px; line-height:1.8; color:#e8f0f8; border-left:4px solid var(--accent1); font-size:15px}
+.explanation-box p{margin:14px 0; line-height:1.8}
+.explanation-box p:first-child{margin-top:0}
+.explanation-box p:last-child{margin-bottom:0}
+.explanation-box ul{margin:14px 0; padding-left:28px}
+.explanation-box li{margin:8px 0; line-height:1.7}
+.departments-box{display:flex; flex-wrap:wrap; gap:10px}
+.department-badge{background:linear-gradient(135deg, rgba(124,58,237,0.3), rgba(6,182,212,0.3)); color:#fff; padding:8px 16px; border-radius:8px; font-weight:600; font-size:14px; border:1px solid rgba(255,255,255,0.1)}
+.doc-card{background:rgba(255,255,255,0.02); padding:16px; border-radius:8px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.05)}
+.doc-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px}
+.doc-header h3{margin:0; font-size:16px}
+.doc-score{background:rgba(6,182,212,0.2); color:var(--accent1); padding:4px 10px; border-radius:6px; font-size:13px; font-weight:600}
+.doc-card p{margin:6px 0; font-size:14px}
+.doc-text{color:var(--muted); line-height:1.6}
