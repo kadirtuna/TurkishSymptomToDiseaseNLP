@@ -206,10 +206,10 @@ function PatientView({ onNavigateToDepartment }) {
     if (hasSymptom) {
       // Add symptom and re-check with RAG only (no LLM call)
       const newSymptoms = currentSymptoms + ', ' + currentQuestion;
-      setCurrentQuestion(null);
-      setSurveyMode(false);
+      // Don't hide survey yet - keep it visible to prevent blinking
+      // setCurrentQuestion(null);
+      // setSurveyMode(false);
       setNegativeCount(0);
-      setLoading(true);
       
       try {
         // Only call RAG to check scores, skip LLM
@@ -231,10 +231,11 @@ function PatientView({ onNavigateToDepartment }) {
           if (topScore > 0.7 && othersLow) {
             // Navigate to department with doctor info
             const normalizedText = normalized.join(', ');
-            setLoading(false);
+            setSurveyMode(false); // Hide survey only when navigating
+            setLoading(true); // Only show loading when navigating
             const doctorInfo = await getDoctorInfo(newSymptoms);
             setIsProcessingAnswer(false);
-            onNavigateToDepartment(docs[0].Department, normalizedText, doctorInfo);
+            onNavigateToDepartment(docs[0].Department, normalizedText, doctorInfo, docs);
             return;
           }
         }
@@ -250,14 +251,15 @@ function PatientView({ onNavigateToDepartment }) {
         });
         
         if (availableSymptoms.length > 0 && newQuestionCount < 4) {
-          // Continue survey with existing list
-          setSurveyMode(true);
+          // Continue survey with next question - survey stays visible
           setCurrentQuestion(availableSymptoms[0]);
           setCurrentSymptoms(normalizedText);
           setIsProcessingAnswer(false);
         } else {
           // No more questions or reached limit, navigate to top department
           if (docs.length > 0) {
+            setSurveyMode(false); // Hide survey only when navigating
+            setLoading(true); // Show loading only when navigating
             const doctorInfo = await getDoctorInfo(newSymptoms);
             setIsProcessingAnswer(false);
             onNavigateToDepartment(docs[0].Department, normalizedText, doctorInfo, docs);
@@ -267,9 +269,8 @@ function PatientView({ onNavigateToDepartment }) {
         console.error('API error', e);
         setError(e.message || 'API error');
         setIsProcessingAnswer(false);
-      } finally {
-        setLoading(false);
       }
+      // No finally block needed - loading is only set when navigating
     } else {
       // Increment negative count
       const newNegativeCount = negativeCount + 1;
@@ -329,11 +330,20 @@ function PatientView({ onNavigateToDepartment }) {
   if (surveyMode && currentQuestion) {
     return (
       <div className="container">
+        {loading && (
+          <div className="overlay" role="status" aria-busy="true">
+            <div className="overlay-inner">
+              <img src={Logo} alt="logo" className="logo-anim" />
+              <div className="overlay-text">Bölüm öneriniz hazırlanıyor...</div>
+            </div>
+          </div>
+        )}
+        
         <main className="content survey-container">
           <div className="survey-card">
             <h2>Ek Belirtiler</h2>
             <p className="survey-question">Aşağıdaki belirtiyi yaşıyor musunuz?</p>
-            <div className="symptom-box">
+            <div className="symptom-box" key={currentQuestion}>
               {currentQuestion}
             </div>
             <div className="survey-actions">
@@ -355,7 +365,7 @@ function PatientView({ onNavigateToDepartment }) {
             <p className="survey-hint">
               {questionCount < 4 && negativeCount < 3 
                 ? `En fazla ${Math.max(0, 4 - questionCount)} soru daha veya ${Math.max(0, 3 - negativeCount)} "Hayır" yanıtından sonra bölüm önerisi yapılacak.`
-                : 'Bölüm öneriniz hazırlanıyor...'}
+                : ''}
             </p>
           </div>
         </main>

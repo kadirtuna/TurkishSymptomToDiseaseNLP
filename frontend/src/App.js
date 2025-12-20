@@ -96,7 +96,14 @@ function App() {
     return (
       <div className="App">
         <div className="header-bar">
-          <img src={Logo} alt="logo" className="logo-small" />
+          <img 
+            src={Logo} 
+            alt="logo" 
+            className="logo-small" 
+            onClick={handleBackToRoleSelection}
+            style={{cursor: 'pointer'}}
+            title="Ana Sayfaya Dön"
+          />
           <button onClick={handleBackToRoleSelection} className="btn-back">← Ana Sayfa</button>
         </div>
         <PatientView onNavigateToDepartment={handleNavigateToDepartment} />
@@ -109,7 +116,14 @@ function App() {
     return (
       <div className="App">
         <div className="header-bar">
-          <img src={Logo} alt="logo" className="logo-small" />
+          <img 
+            src={Logo} 
+            alt="logo" 
+            className="logo-small" 
+            onClick={handleBackToRoleSelection}
+            style={{cursor: 'pointer'}}
+            title="Ana Sayfaya Dön"
+          />
           <button onClick={handleBackToRoleSelection} className="btn-back">← Ana Sayfa</button>
         </div>
         <DoctorView patients={patients} />
