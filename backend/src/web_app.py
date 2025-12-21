@@ -1,3 +1,7 @@
+import os
+# Set to use pure-Python protobuf implementation for compatibility with zemberek-grpc
+os.environ['PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION'] = 'python'
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import traceback
