@@ -113,16 +113,21 @@ function DoctorView({ patients }) {
             </section>
             
                         {/* Suggested Departments */}
-            {doctorInfo && doctorInfo.departments && Array.isArray(doctorInfo.departments) && doctorInfo.departments.length > 0 && (
-              <section className="detail-section">
-                <h2>🏥 Önerilen Diğer Bölümler</h2>
-                <div className="departments-box">
-                  {doctorInfo.departments.map((dept, idx) => (
-                    <span key={idx} className="department-badge">{String(dept)}</span>
-                  ))}
-                </div>
-              </section>
-            )}
+            {(() => {
+              const otherDepartments = doctorInfo && doctorInfo.departments && Array.isArray(doctorInfo.departments)
+                ? doctorInfo.departments.filter(dept => String(dept).toLowerCase() !== String(selectedPatient.department).toLowerCase())
+                : [];
+              return otherDepartments.length > 0 && (
+                <section className="detail-section">
+                  <h2>🏥 Önerilen Diğer Bölümler</h2>
+                  <div className="departments-box">
+                    {otherDepartments.map((dept, idx) => (
+                      <span key={idx} className="department-badge">{String(dept)}</span>
+                    ))}
+                  </div>
+                </section>
+              );
+            })()}
 
             {/* Additional Symptoms to Ask - Separate Section */}
             {doctorInfo && doctorInfo.symptoms_to_ask && Array.isArray(doctorInfo.symptoms_to_ask) && doctorInfo.symptoms_to_ask.length > 0 ? (
