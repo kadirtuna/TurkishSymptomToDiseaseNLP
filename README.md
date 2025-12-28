@@ -233,13 +233,42 @@ npm start
 
 ```
 .
-├── backend/          # Backend application
-│   └── src/         # Source code for RAG and web app
-├── data/            # Dataset files
-├── frontend/        # React frontend application
-├── helpers/         # Utility scripts
-├── faiss_index/     # FAISS vector database
-└── requirements.txt # Python dependencies
+├── backend/              # Backend application
+│   ├── config.yaml      # Backend configuration file
+│   ├── assets/          # Backend assets
+│   │   ├── stopwords.txt      # Turkish stopwords list
+│   │   └── symptoms.json      # Symptoms database
+│   ├── data/            # Backend data storage
+│   │   └── vector/      # Vector database storage
+│   │       └── disease_faiss.index  # FAISS index file
+│   └── src/             # Source code for RAG and web app
+│       ├── config_loader.py      # Configuration loader
+│       ├── rag_openai.py         # RAG implementation with OpenAI
+│       ├── web_app.py            # Flask web application
+│       └── zemberek_client.py    # Zemberek NLP client
+├── data/                # Original dataset files
+│   ├── hastalik_with_text.csv       # Disease data with descriptions
+│   ├── hastalk.csv                  # Raw disease data
+│   └── chore/           # Data processing results
+│       ├── disease_department_lookup.csv
+│       ├── distinct_diseases.json
+│       └── hastalik_with_department.csv
+├── frontend/            # React frontend application
+│   ├── package.json    # Frontend dependencies
+│   ├── build/          # Production build
+│   ├── public/         # Public assets
+│   └── src/            # React source code
+│       ├── App.js           # Main application component
+│       ├── PatientView.js   # Patient interface
+│       └── DoctorView.js    # Doctor interface
+├── helpers/             # Utility scripts for data processing
+│   ├── create_vector_database.py      # FAISS index creation
+│   ├── generate_text_column.py        # Data preprocessing
+│   ├── department_matching_script.py  # Department mapping
+│   └── test_rag_call.py               # RAG testing
+├── images/              # UI screenshots for documentation
+├── faiss_index/         # Legacy FAISS vector database
+└── requirements.txt     # Python dependencies
 ```
 
 ## Technologies Used
