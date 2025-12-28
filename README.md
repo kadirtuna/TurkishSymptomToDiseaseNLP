@@ -34,7 +34,7 @@ Upon entering the patient side, users are greeted with a clean interface that pr
 
 ![Patient Landing Page with User Input](images/patient-landing-page-with-user-input.png)
 
-This screenshot shows an example of a patient entering their symptoms. In this case, the patient has written "Başım çok ağrıyor ve ateşim var" (My head hurts a lot and I have a fever). After entering their symptoms, patients click the **"Gönder"** (Send) button to submit their information to the RAG system for analysis.
+This screenshot shows an example of a patient entering their symptoms. In this case, the patient has written "Işığa ve sese duyarlıyım, başım ağrıyor." (I am sensitive to light and sound, my head hurts). After entering their symptoms, patients click the **"Gönder"** (Send) button to submit their information to the RAG system for analysis.
 
 ### 4. Initial Processing
 
@@ -79,7 +79,6 @@ The doctor panel presents a comprehensive dashboard showing all patients who hav
 - **Symptoms Summary**: Brief overview of the patient's reported symptoms
 - **Recommended Department**: The department that the RAG system has assigned based on analysis (e.g., Nöroloji, Kardiyoloji, İç Hastalıkları)
 - **Date and Time**: When the patient submitted their symptoms
-- **Status Indicator**: Visual indication of the case status
 
 Doctors can click on any patient card to view detailed information and AI-generated diagnostic insights for that specific case.
 
