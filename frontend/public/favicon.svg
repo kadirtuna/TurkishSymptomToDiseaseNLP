@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#0f172a"/>
+  
+  <!-- Heart with pulse line -->
+  <path d="M32 48 L22 38 C18 34 18 28 22 24 C26 20 30 22 32 24 C34 22 38 20 42 24 C46 28 46 34 42 38 Z" fill="url(#grad)"/>
+  
+  <!-- Pulse line -->
+  <path d="M12 32 L18 32 L21 28 L24 36 L27 32 L30 32" stroke="url(#grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.8"/>
+  
+  <!-- Stethoscope circle -->
+  <circle cx="48" cy="18" r="5" fill="none" stroke="url(#grad)" stroke-width="2.5"/>
+  <circle cx="48" cy="18" r="2" fill="url(#grad)"/>
+</svg>

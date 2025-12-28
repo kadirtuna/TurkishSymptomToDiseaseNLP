@@ -128,12 +128,141 @@ def format_context(docs):
         )
     return "\n".join(formatted)
 
+def extract_normalized_symptoms(user_input):
+    """
+    Extract and normalize symptoms from user input into clean symptom phrases.
+    Example: "Başım ağrıyor ve midem bulanıyor" -> ["baş ağrısı", "mide bulantısı"]
+    """
+    # Get lemmatized tokens
+    lemmas = get_lemmas(user_input)
+    
+    print(f"🔍 Lemmas from Zemberek: {lemmas}")
+    
+    # Common symptom patterns in Turkish - expanded with more variations
+    symptom_mappings = {
+        'baş ağr': 'baş ağrısı',  # More specific match
+        'karın ağr': 'karın ağrısı',
+        'göğüs ağr': 'göğüs ağrısı',
+        'sırt ağr': 'sırt ağrısı',
+        'boyun ağr': 'boyun ağrısı',
+        'eklem ağr': 'eklem ağrısı',
+        'kas ağr': 'kas ağrısı',
+        'baş dön': 'baş dönmesi',  # Only match full phrase
+        'ışığa duyar': 'ışığa duyarlılık',
+        'ışık duyar': 'ışığa duyarlılık',
+        'sese duyar': 'sese duyarlılık',
+        'ses duyar': 'sese duyarlılık',
+        'fotofobi': 'ışığa duyarlılık',
+        'fonofobi': 'sese duyarlılık',
+        'mide bulant': 'mide bulantısı',
+        'bulantı': 'bulantı',
+        'bulant': 'bulantı',
+        'kusma': 'kusma',
+        'kus': 'kusma',
+        'kusmak': 'kusma',
+        'öksürük': 'öksürük',
+        'öksür': 'öksürük',
+        'ateş': 'ateş',
+        'halsiz': 'halsizlik',
+        'yorgun': 'yorgunluk',
+        'uyku': 'uyku sorunu',
+        'karın': 'karın ağrısı',
+        'göğüs': 'göğüs ağrısı',
+        'nefes dar': 'nefes darlığı',
+        'nefes': 'nefes darlığı',
+        'ödem': 'ödem',
+        'şiş': 'şişlik',
+        'kızarık': 'kızarıklık',
+        'kaşıntı': 'kaşıntı',
+        'ishal': 'ishal',
+        'kabızlık': 'kabızlık',
+        'titreme': 'titreme',
+        'terle': 'terleme',
+        'çarpıntı': 'çarpıntı',
+        'hırıltı': 'hırıltı',
+        'hapşır': 'hapşırma',
+        'ağr': 'ağrı',  # Generic pain - add last so specific ones match first
+    }
+    
+    # Extract symptoms based on lemmas and input text
+    symptoms = []
+    text_lower = user_input.lower()
+    lemmas_lower = [l.lower() for l in lemmas]
+    
+    print(f"🔍 Looking for symptoms in: {text_lower}")
+    print(f"🔍 Lemmas (lowercase): {lemmas_lower}")
+    
+    for key, symptom_name in symptom_mappings.items():
+        # Check if key appears in original text or in any lemma
+        found = False
+        
+        # For multi-word keys (with space), check if both parts exist
+        if ' ' in key:
+            parts = key.split()
+            # Check if all parts appear in text or lemmas
+            all_parts_found = True
+            for part in parts:
+                part_found = False
+                if part in text_lower:
+                    part_found = True
+                else:
+                    for lemma in lemmas_lower:
+                        if part in lemma:
+                            part_found = True
+                            break
+                if not part_found:
+                    all_parts_found = False
+                    break
+            
+            if all_parts_found:
+                found = True
+                print(f"✅ Found all parts of '{key}' -> {symptom_name}")
+        else:
+            # Single-word pattern
+            if key in text_lower:
+                found = True
+                print(f"✅ Found '{key}' in text -> {symptom_name}")
+            else:
+                for lemma in lemmas_lower:
+                    if key in lemma:
+                        found = True
+                        print(f"✅ Found '{key}' in lemma '{lemma}' -> {symptom_name}")
+                        break
+        
+        if found and symptom_name not in symptoms:
+            symptoms.append(symptom_name)
+    
+    # Post-processing: Remove generic "ağrı" if specific pain types exist
+    specific_pains = ['baş ağrısı', 'karın ağrısı', 'göğüs ağrısı', 'sırt ağrısı', 
+                      'boyun ağrısı', 'eklem ağrısı', 'kas ağrısı']
+    has_specific_pain = any(pain in symptoms for pain in specific_pains)
+    if has_specific_pain and 'ağrı' in symptoms:
+        symptoms.remove('ağrı')
+        print(f"🔧 Removed generic 'ağrı' because specific pain type exists")
+    
+    print(f"✅ Final normalized symptoms: {symptoms}")
+    
+    # If no specific symptoms found, return the lemmatized tokens as fallback
+    if not symptoms:
+        symptoms = [lemma.lower() for lemma in lemmas if lemma.lower() not in TURKISH_STOPWORDS]
+        print(f"⚠️ No mappings found, using lemmas as fallback: {symptoms}")
+    
+    return symptoms
+
 # ===========================
 # Ask GPT-4
 # ===========================
 def ask_gpt4(user_input):
-    patient_symptoms = list(normalize_tokens(user_input))
-    retrieved_docs = retrieve_relevant_context(user_input, k=5)
+    # Extract normalized symptoms from user input
+    normalized_symptoms = extract_normalized_symptoms(user_input)
+    normalized_query = ", ".join(normalized_symptoms)
+    
+    print(f"\n🔍 Original input: {user_input}")
+    print(f"🔍 Normalized symptoms: {normalized_symptoms}")
+    print(f"🔍 Normalized query: {normalized_query}")
+    
+    # Use normalized query for retrieval
+    retrieved_docs = retrieve_relevant_context(normalized_query, k=5)
     context_text = format_context(retrieved_docs)
 
     system_prompt = (
@@ -145,25 +274,29 @@ def ask_gpt4(user_input):
         "{"
         "'patient_symptoms': [ ... ], "
         "'departments': [ ... ], "
-        "'extra_symptoms': { 'Departman Adı': [ ... ], 'Hastalık Adı': [ ... ] }, "
+        "'symptoms_to_ask': [ ... ], "
         "'disease_probabilities': [{ 'disease': 'Hastalık Adı', 'probability': 0.xx }], "
         "'explanation': '...' "
         "}"
         "Kurallar: "
         "1. 'patient_symptoms' alanında, normalize edilmiş kullanıcı belirtilerini listele. "
         "2. Eğer belirtiler tek bir departmanla yüksek güvenle eşleşiyorsa, 'departments' listesinde sadece o departmanı ver. "
-        "3. Eğer belirtiler birden fazla departmanla benzer düzeyde eşleşiyorsa, 'departments' listesinde en ilgili departmanları ver ve "
-        "her departman için 'extra_symptoms' listesinde kullanıcıya sorulabilecek ek semptomları ekle. "
-        "4. 'disease_probabilities' alanında, **verilen context içinde bulunan TÜM olası hastalıkları** (örneğin top-k = 5 veya 10), "
+        "3. Eğer belirtiler birden fazla departmanla benzer düzeyde eşleşiyorsa, 'departments' listesinde en ilgili departmanları ver. "
+        "4. 'symptoms_to_ask' alanında, hastaya sorulabilecek ek belirtileri listele. **ÇOK ÖNEMLİ:** "
+        "   - SADECE belirtileri ekle (ağrı, bulantı, öksürük gibi), departman veya hastalık adı ASLA ekleme. "
+        "   - Hastanın GİRMEDİĞİ belirtileri sor. "
+        "   - Ağır/ciddi belirtileri (felç, sara nöbeti, bayılma, bilinç kaybı, şok gibi) ASLA sorma çünkü bu belirtileri yaşayan hasta zaten cevap veremez. "
+        "   - Sadece hafif-orta şiddette, günlük yaşamda fark edilebilecek belirtileri sor (baş ağrısı, bulantı, halsizlik, öksürük, ateş gibi). "
+        "   - Her belirtiyi kısa ve net sor (örn: 'baş ağrısı', 'mide bulantısı', 'ışığa duyarlılık'). Unutma, semptomlar sana verdiğim hastalık kayıtlarından gelmeli. "
+        "   - En fazla 10 belirtiyi listeye ekle, önem sırasına göre. "
+        "5. 'disease_probabilities' alanında, **verilen context içinde bulunan TÜM olası hastalıkları** (örneğin top-k = 5), "
         "departman eşleşmesinden veya olasılık düzeyinden bağımsız şekilde **tam liste olarak** ver. "
-        "Her hastalık için 0.00–0.99 aralığında makul bir olasılık değeri ile doldur (Bunun için Final score'ları kullan), "
-        "ve hiçbir hastalığı atlama. "
-        "5. 'extra_symptoms' alanında, **departmanlardan bağımsız olarak**, tüm hastalıklar ('disease_probabilities'te bulunan) için kullanıcıya sorulabilecek önemli semptomları ekle. "
+        "Her hastalık için 0.00–0.99 aralığında makul bir olasılık değeri ile doldur (Bunun için Final score'ları kullan). "
         "6. 'explanation' alanında doktorun okuyacağı kısa ama detaylı açıklama olmalı; her hastalık için hangi ek semptomları dikkate alması gerektiğini belirt. "
-        "7. Eğer belirtiler context ile eşleşmiyorsa, 'departments' ve 'disease_probabilities' boş listeler, 'extra_symptoms' boş obje, 'explanation' kısa uyarı mesajı olsun."
+        "7. Eğer belirtiler context ile eşleşmiyorsa, 'departments' ve 'disease_probabilities' boş listeler, 'symptoms_to_ask' boş liste, 'explanation' kısa uyarı mesajı olsun."
     )
 
-    user_prompt = f"Veri tabanı kayıtları:\n{context_text}\n\nKullanıcının belirtileri: {user_input}"
+    user_prompt = f"Veri tabanı kayıtları:\n{context_text}\n\nKullanıcının belirtileri: {normalized_query}"
 
     print("\n==================== SYSTEM PROMPT ====================")
     print(system_prompt)
@@ -177,13 +310,13 @@ def ask_gpt4(user_input):
             {"role": "user", "content": user_prompt},
             {
                 "role": "user",
-                "content": f"Hastanın belirtileri (tokenizasyon ile çıkarılmış): {patient_symptoms}"
+                "content": f"Hastanın normalize edilmiş belirtileri: {normalized_symptoms}"
             },
         ],
         temperature=0.2,
     )
 
-    return response.choices[0].message.content, retrieved_docs
+    return response.choices[0].message.content, retrieved_docs, normalized_symptoms
 
 # ===========================
 # Run example
