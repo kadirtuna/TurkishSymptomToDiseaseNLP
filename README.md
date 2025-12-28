@@ -308,3 +308,52 @@ npm start
 - **RAG (Retrieval-Augmented Generation)** - Combines vector search with LLM for context-aware responses
 - **Vector Database** - FAISS index with ~1000 medical records
 - **gRPC** - Communication protocol for Zemberek service
+
+---
+
+## 🚀 Roadmap & Future Improvements
+
+This project is currently in the **MVP (Minimum Viable Product)** phase. Below are the planned improvements for the next iteration:
+
+### ✅ Completed Improvements
+- **Configuration Management**: ✓ Successfully refactored hardcoded configurations and mappings into external `config.yaml` and JSON files (`symptoms.json`, `stopwords.txt`) for better maintainability and easier updates.
+
+### 🔄 In Progress & Planned Features
+
+#### System Architecture Enhancements
+- **Dynamic Symptom Recognition**: Implement an additional RAG pipeline to dynamically identify and normalize Turkish medical symptoms instead of relying on hardcoded symptom lists. This would allow the system to understand a wider variety of symptom descriptions and medical terminology.
+
+- **Modular Configuration**: Continue eliminating remaining hardcoded values by moving them to configuration files, making the system more flexible and easier to deploy in different medical contexts.
+
+#### User Experience Improvements
+- **Appointment Scheduling System**: Add a calendar interface for patients to book appointments with the recommended department on their preferred date and time. This would complete the patient journey from symptom input to actual consultation scheduling.
+
+- **Department-Specific Doctor Panels**: Implement separate doctor interfaces for each medical department (Neurology, Cardiology, Internal Medicine, etc.), allowing doctors to view only patients referred to their specific department with department-specific analytics and insights.
+
+#### Data Quality & Accuracy
+- **Duplicate Disease Elimination**: Enhance the disease probability calculation algorithm to detect and merge duplicate or very similar disease entries, providing cleaner and more accurate diagnostic suggestions to doctors.
+
+- **Expanded Medical Database**: Grow the vector database beyond the current ~1000 medical records to cover a broader range of diseases, symptoms, and medical conditions. This will significantly improve diagnostic accuracy and system coverage.
+
+#### Performance Optimization
+- **Model Quantization**: Optimize inference time by quantizing the multilingual-E5-base embedding model or migrating to ONNX runtime, potentially reducing response time by 40-60% without significant accuracy loss.
+
+- **Caching Layer**: Implement Redis or similar caching for frequently accessed vector embeddings and common symptom queries to reduce computational overhead.
+
+#### Code Quality & Testing
+- **Comprehensive Unit Tests**: Develop a full test suite covering the RAG pipeline, vector similarity calculations, hybrid scoring algorithms, and API endpoints to ensure system reliability and catch regressions early.
+
+- **Integration Tests**: Add end-to-end testing for the complete patient and doctor workflows to validate the entire system behavior.
+
+- **Code Documentation**: Enhance inline documentation and add API documentation using tools like Swagger/OpenAPI for better developer experience.
+
+#### Advanced Features
+- **Multi-language Support**: Extend beyond Turkish to support additional languages, making the system accessible to a broader user base.
+
+- **Symptom Severity Tracking**: Implement a timeline feature for patients to track symptom progression over time, helping doctors understand disease evolution.
+
+- **Medical Literature Integration**: Connect to medical databases (PubMed, medical journals) to provide doctors with relevant research papers and clinical studies related to the diagnosed conditions.
+
+---
+
+**Note**: This roadmap represents planned improvements to enhance the system's capabilities. The current MVP version is fully functional and demonstrates the core RAG-based medical assistant concept effectively.
