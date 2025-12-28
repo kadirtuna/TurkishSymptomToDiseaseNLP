@@ -106,13 +106,6 @@ __pycache__/
 # Swap files
 *.swp
 
-# FAISS / vector index and other generated vector data
-vector/
-faiss_index/
-data/vector/
-*.index
-*.faiss
-
 # Project-specific large/generated files
 *.npz
 *.npy

@@ -1,0 +1,15 @@
+models:
+  embedding: "intfloat/multilingual-e5-base"
+  llm: "gpt-4o-mini"
+
+paths:
+  faiss_index: "data/vector/disease_faiss.index"
+  metadata: "data/vector/disease_metadata.pkl"
+  symptom_mappings: "assets/symptoms.json"
+  stopwords: "assets/stopwords.txt"
+
+parameters:
+  retrieval_k: 5
+  semantic_weight: 0.7
+  overlap_weight: 0.3
+  temperature: 0.2
