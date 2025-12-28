@@ -2,29 +2,138 @@
 
 A medical symptom analysis application using Retrieval-Augmented Generation (RAG) with OpenAI and FAISS vector database. The system processes Turkish language symptoms using Zemberek NLP and provides medical recommendations.
 
-## Screenshots
+## Screenshots and User Interface Guide
 
-### Landing Page
+### Introduction
 
-The main interface where users can input their symptoms in Turkish.
+The RAG Tıbbi Asistan (Medical Assistant) System provides a comprehensive interface for both patients and medical professionals. The system allows patients to describe their symptoms and get intelligent department recommendations, while doctors can review patient information, AI-generated insights, and detailed diagnostic analysis.
 
-![Landing Page](images/main-page.png)
+### Main Landing Page
 
-### RAG Medical Assistant Output
+![Landing Page](images/landing-page.png)
 
-The output from "RAG Tıbbi Asistan" displays comprehensive medical analysis including:
-- **Sonuç** (Result) - Overall diagnosis recommendation
-- **Özet Belirtiler** (Summary of Symptoms) - Key symptoms identified
-- **Bölümler** (Departments) - Recommended medical departments to visit
-- **Açıklama** (Explanation) - Detailed explanation of the diagnosis
+When users first access the application, they encounter the main interface titled "RAG Tıbbi Asistan Sistemi" (RAG Medical Assistant System). Here, users must choose their role in the system - either as a **Hasta** (Patient) or **Doktor** (Doctor). This role selection determines the workflow and features available to the user.
 
-![Diseases Output](images/diseases-output.png)
+---
 
-### Probable Diseases
+## Patient Side Workflow
 
-Shows the most probable diseases diagnosed by the RAG system with their main symptom definitions. This helps doctors see possible diseases based on the user's symptoms.
+### 1. Role Selection
 
-![Probable Diseases](images/probable-diseases.png)
+![Patient Side Selection](images/patient-side-selection.png)
+
+To access the patient interface, users select the "Hasta" (Patient) option from the main landing page. This navigates them to the patient-specific interface where they can describe their symptoms.
+
+### 2. Patient Landing Page
+
+![Patient Landing Page](images/patient-landing-page.png)
+
+Upon entering the patient side, users are greeted with a clean interface that prompts them to input their symptoms. The text area displays the message "Belirtilerinizi buraya yazın..." (Write your symptoms here...), inviting patients to describe what they're experiencing in their own words in Turkish.
+
+### 3. Entering Symptoms
+
+![Patient Landing Page with User Input](images/patient-landing-page-with-user-input.png)
+
+This screenshot shows an example of a patient entering their symptoms. In this case, the patient has written "Başım çok ağrıyor ve ateşim var" (My head hurts a lot and I have a fever). After entering their symptoms, patients click the **"Gönder"** (Send) button to submit their information to the RAG system for analysis.
+
+### 4. Initial Processing
+
+![Loading Bar After Sending](images/loading-bar-after-sending.png)
+
+Immediately after clicking the send button, patients see a loading indicator. During this phase, the RAG system is processing the initial symptom description, performing semantic analysis, and preparing relevant follow-up questions to better understand the patient's condition.
+
+### 5. Follow-up Questions
+
+![Extra Symptoms Questions](images/extra-symptoms-questions.png)
+
+The system presents patients with additional questions to gather more specific information about their symptoms. These questions are dynamically generated based on the patient's initial input and may vary depending on what symptoms were described. The questions help the system narrow down the possible conditions and make more accurate department recommendations. Patients' answers to these questions further refine the diagnostic process, as the system adapts its analysis based on each response.
+
+### 6. Final Processing
+
+![Loading Bar After Questions](images/loading-bar-after-questions.png)
+
+After answering the follow-up questions, patients see another loading indicator. At this stage, the RAG system is performing comprehensive analysis by combining all the patient's inputs and answers, calculating similarity scores using the FAISS vector database, applying hybrid scoring algorithms (70% semantic similarity + 30% token overlap), and determining the most appropriate medical department for the patient's condition.
+
+### 7. Department Recommendation
+
+![Department Navigation](images/department-navigation.png)
+
+The final step displays the system's recommendation. Based on all the information gathered and analyzed through the RAG pipeline, the patient is directed to the appropriate medical department. The interface shows "Yönlendirildiğiniz bölüm:" (The department you are being directed to:) followed by the recommended department, such as "Nöroloji" (Neurology) in this example. This recommendation is generated by the intelligent combination of vector similarity search, hybrid scoring, and LLM-based reasoning.
+
+---
+
+## Doctor Side Workflow
+
+### 8. Doctor Role Selection
+
+![Doctor Side Selection](images/doctor-side-selection.png)
+
+Representative department doctors access the system by selecting the "Doktor" (Doctor) option from the main landing page. This provides them with access to the doctor panel where they can review all patient cases and detailed diagnostic information.
+
+### 9. Doctor Panel Overview
+
+![Landing Page Doctor Panel](images/landing-page-doctor-panel.png)
+
+The doctor panel presents a comprehensive dashboard showing all patients who have used the system. Each patient card displays:
+- **Patient ID**: Unique identifier (e.g., Hasta #1, #2, #3)
+- **Symptoms Summary**: Brief overview of the patient's reported symptoms
+- **Recommended Department**: The department that the RAG system has assigned based on analysis (e.g., Nöroloji, Kardiyoloji, İç Hastalıkları)
+- **Date and Time**: When the patient submitted their symptoms
+- **Status Indicator**: Visual indication of the case status
+
+Doctors can click on any patient card to view detailed information and AI-generated diagnostic insights for that specific case.
+
+### 10. Patient Detail - Detected Symptoms & Alternative Departments
+
+![Doctor Side Patient Detail 1](images/doctor-side-patient-detail-1.png)
+
+When a doctor selects a patient, the first section shows:
+- **Detected Final Symptoms** (Son Tespit Edilen Belirtiler): A refined list of the patient's symptoms after NLP processing, lemmatization with Zemberek, and semantic analysis
+- **Suggested Other Departments** (Önerilen Diğer Bölümler): Alternative medical departments that might also be relevant to the patient's condition, providing doctors with additional options if the primary recommendation doesn't fully align with their clinical assessment
+
+### 11. Patient Detail - Additional Questions for Doctor
+
+![Doctor Side Patient Detail 2](images/doctor-side-patient-detail-2.png)
+
+This section provides doctors with intelligent, context-aware questions (Doktorun Hastaya Sorabileceği Sorular) that they can ask the patient during consultation. These questions are generated by the LLM based on the patient's symptoms and help doctors:
+- Gather more specific information about the condition
+- Differentiate between similar diagnoses
+- Make a more accurate final diagnosis
+- Conduct a more thorough examination
+
+### 12. Patient Detail - Disease Probabilities
+
+![Doctor Side Patient Detail 3](images/doctor-side-patient-detail-3.png)
+
+The system displays calculated disease possibilities (Hastalık Olasılıkları) with their associated scores. This section shows:
+- **Disease Names**: Potential conditions matching the symptoms
+- **Probability Scores**: Calculated using the hybrid scoring system (combining semantic similarity from the multilingual-E5-base model with token overlap metrics)
+- **Ranking**: Diseases are ordered by their likelihood scores
+
+This provides doctors with a data-driven view of the most probable diagnoses based on the RAG system's analysis of the symptom vector database.
+
+### 13. Patient Detail - AI-Generated Medical Explanation
+
+![Doctor Side Patient Detail 4](images/doctor-side-patient-detail-4.png)
+
+Since the system has comprehensive knowledge of the patient's symptoms and the detected diseases through hybrid scoring and vector similarity search, the LLM (GPT-4) generates a detailed, human-readable explanation (Açıklama) for the doctor. This narrative output includes:
+- Clinical interpretation of the symptoms
+- Reasoning behind the department recommendation
+- Potential diagnostic considerations
+- Suggested approaches for patient care
+
+This transforms the raw data and scores into actionable medical insights that doctors can use in their clinical decision-making process.
+
+### 14. Patient Detail - RAG Retrieved Documents
+
+![Doctor Side Patient Detail 5](images/doctor-side-patient-detail-5.png)
+
+The final section displays the actual database records (Bulunan Kayıtlar) that were retrieved by the RAG system using the k-nearest neighbors algorithm with FAISS. Each record shows:
+- **Disease Information**: Complete disease entries from the medical database
+- **Symptom Descriptions**: Detailed symptom profiles associated with each disease
+- **Similarity Scores**: How closely each record matches the patient's symptoms
+
+This transparency allows doctors to see exactly which medical knowledge entries the AI system used to make its recommendations, providing full traceability and enabling doctors to validate the AI's reasoning process.
 
 ## System Requirements
 
@@ -136,8 +245,30 @@ npm start
 
 ## Technologies Used
 
-- **OpenAI API** - Language model for generating responses
-- **FAISS** - Vector similarity search
-- **Zemberek** - Turkish NLP processing
-- **Flask** - Backend API server
-- **React** - Frontend user interface
+### Backend
+- **Python 3.13.1** - Core programming language
+- **OpenAI GPT-4** - Large Language Model for medical analysis and response generation
+- **FAISS (Facebook AI Similarity Search)** - High-performance vector database for semantic similarity search
+- **Sentence Transformers** - `intfloat/multilingual-e5-base` model for generating text embeddings
+- **Zemberek NLP** - Turkish language processing (lemmatization, morphological analysis)
+- **Flask** - Web framework for REST API
+- **Docker** - Containerization for Zemberek gRPC service
+
+### Frontend
+- **React** - User interface framework
+- **Node.js & npm** - JavaScript runtime and package manager
+
+### Data Processing
+- **Pandas** - Data manipulation and preprocessing
+- **NumPy** - Numerical computations
+- **Pickle** - Metadata serialization
+
+### Natural Language Processing
+- **Multilingual-E5-Base** - 768-dimensional sentence embeddings supporting 100+ languages including Turkish
+- **Snowball Stemmer** - Turkish text normalization
+- **Custom Hybrid Scoring** - 70% semantic similarity + 30% token overlap for retrieval optimization
+
+### Architecture
+- **RAG (Retrieval-Augmented Generation)** - Combines vector search with LLM for context-aware responses
+- **Vector Database** - FAISS index with ~1000 medical records
+- **gRPC** - Communication protocol for Zemberek service
