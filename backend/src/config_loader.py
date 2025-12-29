@@ -10,9 +10,21 @@ from dotenv import load_dotenv
 
 current_file_path = Path(__file__).resolve()
 project_root = current_file_path.parent.parent  # Points to 'backend' folder
+actual_project_root = project_root.parent  # Points to actual project root (SourceCode)
 
-# Load .env file
-load_dotenv(project_root / ".env")
+# Load .env file from actual project root
+env_path = actual_project_root / ".env"
+if env_path.exists():
+    load_dotenv(env_path)
+    print(f"✅ Loaded .env from: {env_path}")
+else:
+    # Fallback: try backend folder
+    env_path_fallback = project_root / ".env"
+    if env_path_fallback.exists():
+        load_dotenv(env_path_fallback)
+        print(f"✅ Loaded .env from: {env_path_fallback}")
+    else:
+        print(f"⚠️ No .env file found at {env_path} or {env_path_fallback}")
 
 class ProjectConfig:
     """

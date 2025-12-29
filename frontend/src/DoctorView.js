@@ -159,7 +159,10 @@ function DoctorView({ patients }) {
               <section className="detail-section">
                 <h2>📊 Hastalık Olasılıkları</h2>
                 <div className="probability-list">
-                  {doctorInfo.disease_probabilities.map((item, idx) => (
+                  {doctorInfo.disease_probabilities
+                    .slice()
+                    .sort((a, b) => (b.probability || 0) - (a.probability || 0))
+                    .map((item, idx) => (
                     <div key={idx} className="probability-item">
                       <div className="probability-header">
                         <span className="disease-name">{String(item.disease || 'Bilinmeyen')}</span>

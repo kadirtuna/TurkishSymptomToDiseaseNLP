@@ -96,6 +96,8 @@ function PatientView({ onNavigateToDepartment }) {
       const docs = res.data.retrieved_docs || [];
       const answer = res.data.answer || {};
       const normalized = res.data.normalized_symptoms || [];
+      const shouldSkipQuestions = res.data.should_skip_questions || false;
+      
       setRetrievedDocs(docs);
       
       // Update normalized symptoms list
@@ -108,18 +110,14 @@ function PatientView({ onNavigateToDepartment }) {
         return;
       }
 
-      // Check if the first doc has final_score > 0.7 and others are < 0.7
-      if (docs.length > 0) {
-        const topScore = docs[0].final_score;
-        const othersLow = docs.slice(1).every(d => d.final_score < 0.7);
-        
-        if (topScore > 0.7 && othersLow) {
-          // Navigate to department with doctor info
-          const normalizedText = normalized.join(', ');
-          const doctorInfo = await getDoctorInfo(symptomsText);
-          onNavigateToDepartment(docs[0].Department, normalizedText, doctorInfo, docs);
-          return;
-        }
+      // Check if backend says we should skip questions (high confidence)
+      // OR if the first doc has final_score > 0.7 and others are < 0.7
+      if (shouldSkipQuestions || (docs.length > 0 && docs[0].final_score > 0.7 && docs.slice(1).every(d => d.final_score < 0.7))) {
+        // Navigate to department with doctor info
+        const normalizedText = normalized.join(', ');
+        const doctorInfo = await getDoctorInfo(symptomsText);
+        onNavigateToDepartment(docs[0].Department, normalizedText, doctorInfo, docs);
+        return;
       }
 
       // If we reach here, we need to ask survey questions
@@ -139,6 +137,7 @@ function PatientView({ onNavigateToDepartment }) {
       
       console.log('Raw symptoms from LLM:', rawSymptomsToAsk);
       console.log('Deduplicated symptoms:', symptomsToAsk);
+      console.log('Should skip questions:', shouldSkipQuestions);
       
       setAvailableSymptomsToAsk(symptomsToAsk);
       const normalizedText = normalized.join(', ');
@@ -346,20 +345,52 @@ function PatientView({ onNavigateToDepartment }) {
             <div className="symptom-box" key={currentQuestion}>
               {currentQuestion}
             </div>
+            
+            {isProcessingAnswer && (
+              <div style={{
+                textAlign: 'center',
+                padding: '16px',
+                color: 'var(--accent1)',
+                fontSize: '14px',
+                fontWeight: 500
+              }}>
+                <div style={{
+                  display: 'inline-block',
+                  width: '20px',
+                  height: '20px',
+                  border: '3px solid rgba(88, 166, 255, 0.3)',
+                  borderTopColor: 'var(--accent1)',
+                  borderRadius: '50%',
+                  animation: 'spin 0.8s linear infinite',
+                  marginRight: '8px',
+                  verticalAlign: 'middle'
+                }}></div>
+                Analiz ediliyor...
+              </div>
+            )}
+            
             <div className="survey-actions">
               <button 
                 onClick={() => handleSurveyAnswer(true)} 
                 className="btn-primary"
                 disabled={isProcessingAnswer || loading}
+                style={{
+                  opacity: isProcessingAnswer ? 0.6 : 1,
+                  cursor: isProcessingAnswer ? 'not-allowed' : 'pointer'
+                }}
               >
-                Evet
+                {isProcessingAnswer ? '⏳ Bekleniyor...' : 'Evet'}
               </button>
               <button 
                 onClick={() => handleSurveyAnswer(false)} 
                 className="btn-secondary"
                 disabled={isProcessingAnswer || loading}
+                style={{
+                  opacity: isProcessingAnswer ? 0.6 : 1,
+                  cursor: isProcessingAnswer ? 'not-allowed' : 'pointer'
+                }}
               >
-                Hayır
+                {isProcessingAnswer ? '⏳ Bekleniyor...' : 'Hayır'}
               </button>
             </div>
             <p className="survey-hint">

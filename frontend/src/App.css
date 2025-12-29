@@ -335,6 +335,11 @@ textarea:focus{
 	to{opacity: 1; transform: scale(1)}
 }
 
+@keyframes spin{
+	from{transform: rotate(0deg)}
+	to{transform: rotate(360deg)}
+}
+
 .answer{
 	background: #ffffff;
 	padding: 1rem;

@@ -1,11 +1,9 @@
-import os
 import faiss
 import pickle
 import openai
 from sentence_transformers import SentenceTransformer
-import re
-from zemberek_client import get_lemmas
 from config_loader import config
+import json
 
 # ===========================
 # 1. Setup & Initialization
@@ -28,42 +26,38 @@ with open(config.metadata_path, "rb") as f:
 print(f"🧠 Loading embedding model: {config.embedding_model_name}...")
 embedding_model = SentenceTransformer(config.embedding_model_name)
 
-# ===========================
-# 3. Load Mappings
-# ===========================
-print("📂 Loading static assets...")
-TURKISH_STOPWORDS = config.load_stopwords()
-SYMPTOM_MAPPINGS = config.load_symptom_mappings()
 
 # ===========================
-# 4. Helper Functions
+# 3. Helper Functions
 # ===========================
-def normalize_tokens(text):
+def extract_symptoms_from_text(text):
     """
-    Normalize Turkish text for token overlap using loaded stopwords.
+    Extract symptoms from text. Handles both:
+    - Full document format: "Hastalık: X. Bölüm: Y. Belirtiler: symptom1, symptom2"
+    - Simple comma-separated format: "symptom1, symptom2"
     """
-    lemmas = get_lemmas(text)
+    # Check if it's a full document with "Belirtiler:" section
+    if "Belirtiler:" in text:
+        # Extract everything after "Belirtiler:"
+        symptoms_part = text.split("Belirtiler:")[-1].strip()
+    else:
+        # Already a simple symptom list
+        symptoms_part = text
     
-    normalized_tokens = set()
-    for lemma in lemmas:
-        token = lemma.lower()
-        token = re.sub(r'[^a-zığüşöç]', '', token)
-        
-        if token and token not in TURKISH_STOPWORDS:
-            normalized_tokens.add(token)
-    
-    return normalized_tokens
+    # Split by comma, strip whitespace, and lowercase
+    symptoms = {s.strip().lower() for s in symptoms_part.split(",") if s.strip()}
+    return symptoms
 
 def token_overlap(query, doc_text):
-    """Compute normalized token overlap."""
-    query_tokens = normalize_tokens(query)
-    doc_tokens = normalize_tokens(doc_text)
+    """Compute token overlap between comma-separated symptom lists."""
+    query_symptoms = extract_symptoms_from_text(query)
+    doc_symptoms = extract_symptoms_from_text(doc_text)
     
-    # Prints to be able to debug; can be disabled in production
-    # print(f"Query tokens: {query_tokens}")
-    # print(f"Doc tokens: {doc_tokens}")
+    # Uncomment for debugging
+    # print(f"Query symptoms: {query_symptoms}")
+    # print(f"Doc symptoms: {doc_symptoms}")
 
-    return len(query_tokens & doc_tokens) / max(len(query_tokens), 1)
+    return len(query_symptoms & doc_symptoms) / max(len(query_symptoms), 1)
 
 def retrieve_relevant_context(query, k=None):
     """
@@ -118,71 +112,60 @@ def format_context(docs):
         )
     return "\n".join(formatted)
 
-def extract_normalized_symptoms(user_input):
+def extract_symptoms_via_llm(user_input):
     """
-    Extracts symptoms using the loaded SYMPTOM_MAPPINGS dictionary.
+    Extracts symptoms from user input using LLM.
+    Returns a list of normalized symptom names.
     """
-    lemmas = get_lemmas(user_input)
-    print(f"🔍 Lemmas: {lemmas}")
+    system_prompt = (
+        "Sen bir tıbbi belirtileri çıkaran sistemsin. "
+        "Kullanıcının Türkçe olarak girdiği metinden tüm sağlık belirtilerini (semptomları) çıkarmalısın. "
+        "Yanıtını **mutlaka JSON formatında ver** ve başka hiçbir metin ekleme. "
+        "JSON yapısı şu şekilde olmalıdır (ÇİFT TIRNAK KULLAN): "
+        '{ "symptoms": ["belirti1", "belirti2"] } '
+        "Kurallar: "
+        "1. Sadece tıbbi belirtileri listele (ateş, baş ağrısı, öksürük, bulantı, vb.). "
+        "2. Her belirtiyi normalize edilmiş, standart Türkçe adıyla ver. "
+        "3. Eğer kullanıcı 'başım ağrıyor' diyorsa 'baş ağrısı' olarak normalize et. "
+        '4. Eğer hiç belirti yoksa boş liste döndür: { "symptoms": [] } '
+        "5. MUTLAKA çift tırnak kullan, tek tırnak kullanma!"
+    )
     
-    symptoms = []
-    text_lower = user_input.lower()
-    lemmas_lower = [l.lower() for l in lemmas]
+    user_prompt = f"Kullanıcının metni: {user_input}"
     
-    # Pre processing: Control for multi-word keys
-    for key, symptom_name in SYMPTOM_MAPPINGS.items():
-        found = False
-        
-        # Multi-word key check
-        if ' ' in key:
-            parts = key.split()
-            all_parts_found = True
-            for part in parts:
-                part_found = False
-                if part in text_lower:
-                    part_found = True
-                else:
-                    for lemma in lemmas_lower:
-                        if part in lemma:
-                            part_found = True
-                            break
-                if not part_found:
-                    all_parts_found = False
-                    break
-            if all_parts_found:
-                found = True
-        else:
-            # Single-word key check
-            if key in text_lower:
-                found = True
-            else:
-                for lemma in lemmas_lower:
-                    if key in lemma:
-                        found = True
-                        break
-        
-        if found and symptom_name not in symptoms:
-            symptoms.append(symptom_name)
+    response = openai.chat.completions.create(
+        model=config.llm_model_name,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        temperature=0.1,  # Lower temperature for more deterministic extraction
+    )
     
-    # Post-processing: "Ağrı" filtresi (Special filter for "ağrı")
-    specific_pains = ['baş ağrısı', 'karın ağrısı', 'göğüs ağrısı', 'sırt ağrısı', 
-                      'boyun ağrısı', 'eklem ağrısı', 'kas ağrısı']
+    result_text = response.choices[0].message.content.strip()
+    print(f"🤖 LLM Extraction Response: {result_text}")
     
-    has_specific_pain = any(pain in symptoms for pain in specific_pains)
-    if has_specific_pain and 'ağrı' in symptoms:
-        symptoms.remove('ağrı')
-    
-    if not symptoms:
-        symptoms = [lemma.lower() for lemma in lemmas if lemma.lower() not in TURKISH_STOPWORDS]
-        print(f"⚠️ Fallback to lemmas: {symptoms}")
-    
-    return symptoms
+    try:
+        # Try to replace single quotes with double quotes if needed
+        result_text_fixed = result_text.replace("'", '"')
+        result_json = json.loads(result_text_fixed)
+        symptoms = result_json.get('symptoms', [])
+        print(f"✅ Extracted Symptoms: {symptoms}")
+        return symptoms
+    except json.JSONDecodeError as e:
+        print(f"⚠️ JSON Parse Error: {e}")
+        print(f"⚠️ Using simple extraction as fallback")
+        # Simple fallback: extract words from input
+        import re
+        words = re.findall(r'[a-zığüşöçA-ZİĞÜŞÖÇ\s]+', user_input)
+        return [w.strip().lower() for w in words if w.strip()]
+
 
 # ===========================
 # 5. Core RAG Logic
 # ===========================
 def ask_gpt4(user_input):
-    normalized_symptoms = extract_normalized_symptoms(user_input)
+    normalized_symptoms = extract_symptoms_via_llm(user_input)
     normalized_query = ", ".join(normalized_symptoms)
     
     print(f"🔍 Normalized Query: {normalized_query}")
@@ -193,18 +176,13 @@ def ask_gpt4(user_input):
 
     system_prompt = (
         "Sen bir tıbbi NLP sistemisin. "
-        "Aşağıdaki 'veri tabanı içeriği' hastalık, bölüm ve belirtiler bilgisini içerir. "
+        "Aşağıdaki 'veri tabanı içeriği' hastalık, bölüm, belirtiler ve eşleşme skorları bilgisini içerir. "
         "Kullanıcı Türkçe olarak belirtilerini girecektir. "
         "Yanıtını **mutlaka JSON formatında ver** ve başka hiçbir metin ekleme. "
-        "JSON yapısı şu şekilde olmalıdır: "
-        "{"
-        "'patient_symptoms': [ ... ], "
-        "'departments': [ ... ], "
-        "'symptoms_to_ask': [ ... ], "
-        "'disease_probabilities': [{ 'disease': 'Hastalık Adı', 'probability': 0.xx }], "
-        "'explanation': '...' "
-        "}"
-        "Kurallar: "
+        "JSON yapısı şu şekilde olmalıdır (ÇİFT TIRNAK KULLAN): "
+        '{ "patient_symptoms": [...], "departments": [...], "symptoms_to_ask": [...], '
+        '"disease_probabilities": [{"disease": "...", "probability": 0.xx}], "explanation": "..." }'
+        "\n\nKurallar: "
         "1. 'patient_symptoms' alanında, normalize edilmiş kullanıcı belirtilerini listele. "
         "2. Eğer belirtiler tek bir departmanla yüksek güvenle eşleşiyorsa, 'departments' listesinde sadece o departmanı ver. "
         "3. Eğer belirtiler birden fazla departmanla benzer düzeyde eşleşiyorsa, 'departments' listesinde en ilgili departmanları ver. "
@@ -212,8 +190,12 @@ def ask_gpt4(user_input):
         "   - Sadece hafif-orta şiddette belirtileri sor. "
         "   - Hastanın girmediği belirtileri sor. "
         "   - Maksimum 10 belirti. "
-        "5. 'disease_probabilities' alanında olası hastalıkları ve olasılıklarını listele. "
+        "5. 'disease_probabilities' alanında, veri tabanı kayıtlarında verilen 'Score' değerlerini AYNEN kullan. "
+        "   - Her hastalığın olasılığını (probability) Score / 100 olarak hesapla. "
+        "   - Örnek: Score: 0.646 ise probability: 0.646 yaz. "
+        "   - Hastalıkları Score değerine göre azalan sırada listele. "
         "6. 'explanation' alanında kısa ve detaylı açıklama yap. "
+        "7. MUTLAKA çift tırnak kullan, tek tırnak kullanma!"
     )
 
     user_prompt = f"Veri tabanı kayıtları:\n{context_text}\n\nKullanıcının belirtileri: {normalized_query}"
