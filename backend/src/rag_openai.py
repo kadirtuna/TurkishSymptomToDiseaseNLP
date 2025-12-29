@@ -4,7 +4,6 @@ import pickle
 import openai
 from sentence_transformers import SentenceTransformer
 import re
-import snowballstemmer
 from zemberek_client import get_lemmas
 from config_loader import config
 
@@ -39,8 +38,6 @@ SYMPTOM_MAPPINGS = config.load_symptom_mappings()
 # ===========================
 # 4. Helper Functions
 # ===========================
-stemmer = snowballstemmer.stemmer('turkish')
-
 def normalize_tokens(text):
     """
     Normalize Turkish text for token overlap using loaded stopwords.
